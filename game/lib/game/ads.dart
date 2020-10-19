@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
@@ -19,16 +20,22 @@ class Ads {
     return _adsEnabled() && _loaded;
   }
 
+  static String get appId => Platform.isIOS
+      ? 'ca-app-pub-1572179540677968~8438800634'
+      : 'ca-app-pub-1572179540677968~2049628478';
+
+  static String get adUnitId => Platform.isIOS
+      ? 'ca-app-pub-1572179540677968/3409835233'
+      : 'ca-app-pub-1572179540677968/7034539450';
+
   static Future<void> init() async {
     if (_adsEnabled()) {
-      const appId = 'ca-app-pub-1572179540677968~2049628478';
       _loaded = await FirebaseAdMob.instance.initialize(appId: appId);
       _loadAd(); // pre-loads an ad for the first time
     }
   }
 
   static _loadAd() async {
-    const adUnitId = 'ca-app-pub-1572179540677968/7034539450';
     await RewardedVideoAd.instance.load(
       adUnitId: adUnitId,
       targetingInfo: MobileAdTargetingInfo(
